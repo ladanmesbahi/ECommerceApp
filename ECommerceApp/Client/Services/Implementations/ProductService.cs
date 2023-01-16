@@ -18,5 +18,11 @@ namespace ECommerceApp.Client.Services.Implementations
             if (response is { Success: true, Data: { } })
                 Products = response.Data;
         }
+
+        public async Task<ServiceResponse<Product>> GetProductById(int productId)
+        {
+            return await _httpClient.GetFromJsonAsync<ServiceResponse<Product>>
+            ($"api/product/{productId}");
+        }
     }
 }

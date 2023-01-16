@@ -1,0 +1,20 @@
+﻿@page "/product/{Id:int}"
+@inject IProductService ProductService
+
+@if (_product is null)
+{
+    <span>Loading product...</span>
+}
+else
+{
+    <div class="media">
+        <div class="media-img-wrapper mr-2">
+            <img class="media-img" src="@_product.ImageUrl" alt="@_product.Title">
+        </div>
+        <div class="media-body">
+            <h2 class="mb-0">@_product.Title</h2>
+            <p>@_product.Description</p>
+            <h4 class="price">@_product.Price</h4>
+        </div>
+    </div>
+}

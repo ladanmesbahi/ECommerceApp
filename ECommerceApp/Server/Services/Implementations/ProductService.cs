@@ -17,5 +17,19 @@ namespace ECommerceApp.Server.Services.Implementations
                 Data = await _context.Products.ToListAsync()
             };
         }
+
+        public async Task<object?> GetProductById(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            var response = new ServiceResponse<Product>();
+            if (product is null)
+            {
+                response.Success = false;
+                response.Message = "Product not found";
+            }
+            else
+                response.Data = product;
+            return response;
+        }
     }
 }
