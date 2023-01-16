@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceApp.Server.Controllers
 {
@@ -7,16 +6,17 @@ namespace ECommerceApp.Server.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly DataContext _context;
-        public ProductController(DataContext context)
+        private readonly IProductService _productService;
+
+        public ProductController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProducts()
         {
-            return Ok(await _context.Products.ToListAsync());
+            return Ok(await _productService.GetProducts());
         }
     }
 }

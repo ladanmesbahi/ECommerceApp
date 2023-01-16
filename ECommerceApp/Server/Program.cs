@@ -1,5 +1,8 @@
 global using ECommerceApp.Server.Data;
+global using ECommerceApp.Server.Services.Abstractions;
+global using ECommerceApp.Server.Services.Implementations;
 global using ECommerceApp.Shared.Models;
+global using ECommerceApp.Shared.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
