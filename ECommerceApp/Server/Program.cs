@@ -1,5 +1,5 @@
+global using ECommerceApp.Server.Data;
 global using ECommerceApp.Shared.Models;
-using ECommerceApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
