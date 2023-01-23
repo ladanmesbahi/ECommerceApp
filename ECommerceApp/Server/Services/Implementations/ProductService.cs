@@ -14,13 +14,18 @@ namespace ECommerceApp.Server.Services.Implementations
         {
             return new ServiceResponse<List<Product>>
             {
-                Data = await _context.Products.ToListAsync()
+                Data = await _context.Products
+                    .Include(p => p.Variants)
+                    .ToListAsync()
             };
         }
 
         public async Task<ServiceResponse<Product>> GetProductById(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                .Include(p => p.Variants)
+                .ThenInclude(v => v.ProductType)
+                .FirstOrDefaultAsync(p => p.Id == id);
             var response = new ServiceResponse<Product>();
             if (product is null)
             {
@@ -36,7 +41,9 @@ namespace ECommerceApp.Server.Services.Implementations
         {
             return new ServiceResponse<List<Product>>
             {
-                Data = await _context.Products.Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
+                Data = await _context.Products
+                    .Include(p => p.Variants)
+                    .Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
             };
         }
     }
