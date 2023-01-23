@@ -11,14 +11,17 @@ namespace ECommerceApp.Client.Services.Implementations
         {
             _httpClient = httpClient;
         }
-        public List<Product> Products { get; set; }
-        public async Task GetProducts()
+
+        public event Action ProductsChanged;
+        public List<Product> Products { get; set; } = new List<Product>();
+        public async Task GetProducts(string? categoryUrl = null)
         {
-            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product");
+            var response = categoryUrl is null ? await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product") :
+                await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/category/{categoryUrl}");
             if (response is { Success: true, Data: { } })
                 Products = response.Data;
+            ProductsChanged.Invoke();
         }
-
         public async Task<ServiceResponse<Product>> GetProductById(int productId)
         {
             return await _httpClient.GetFromJsonAsync<ServiceResponse<Product>>

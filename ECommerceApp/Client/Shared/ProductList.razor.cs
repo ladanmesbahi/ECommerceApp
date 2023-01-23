@@ -1,10 +1,15 @@
 ﻿namespace ECommerceApp.Client.Shared
 {
-    public partial class ProductList
+    public partial class ProductList : IDisposable
     {
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            await ProductService.GetProducts();
+            ProductService.ProductsChanged += StateHasChanged;
+        }
+
+        public void Dispose()
+        {
+            ProductService.ProductsChanged -= StateHasChanged;
         }
     }
 }

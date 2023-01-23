@@ -18,7 +18,7 @@ namespace ECommerceApp.Server.Services.Implementations
             };
         }
 
-        public async Task<object?> GetProductById(int id)
+        public async Task<ServiceResponse<Product>> GetProductById(int id)
         {
             var product = await _context.Products.FindAsync(id);
             var response = new ServiceResponse<Product>();
@@ -30,6 +30,14 @@ namespace ECommerceApp.Server.Services.Implementations
             else
                 response.Data = product;
             return response;
+        }
+
+        public async Task<ServiceResponse<List<Product>>> GetProductsByCategory(string categoryUrl)
+        {
+            return new ServiceResponse<List<Product>>
+            {
+                Data = await _context.Products.Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
+            };
         }
     }
 }

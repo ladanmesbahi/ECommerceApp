@@ -3,6 +3,7 @@
     public interface IProductService
     {
         Task<ServiceResponse<List<Product>>> GetProducts();
-        Task<object?> GetProductById(int id);
+        Task<ServiceResponse<Product>> GetProductById(int id);
+        Task<ServiceResponse<List<Product>>> GetProductsByCategory(string categoryUrl);
     }
 }

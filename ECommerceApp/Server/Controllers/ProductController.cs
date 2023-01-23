@@ -24,5 +24,11 @@ namespace ECommerceApp.Server.Controllers
         {
             return Ok(await _productService.GetProductById(productId));
         }
+
+        [HttpGet("category/{categoryUrl}")]
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsByCategory(string categoryUrl)
+        {
+            return Ok(await _productService.GetProductsByCategory(categoryUrl));
+        }
     }
 }
