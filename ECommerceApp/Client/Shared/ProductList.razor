@@ -1,7 +1,7 @@
 ﻿@inject IProductService ProductService;
 @if (ProductService is { Products: null } || ProductService.Products.Count == 0)
 {
-    <span>Loading products...</span>
+    <span>@ProductService.Message</span>
 }
 else
 {

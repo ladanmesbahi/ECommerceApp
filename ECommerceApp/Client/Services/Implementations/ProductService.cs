@@ -14,6 +14,8 @@ namespace ECommerceApp.Client.Services.Implementations
 
         public event Action ProductsChanged;
         public List<Product> Products { get; set; } = new List<Product>();
+        public string Message { get; set; } = "Loading products... ";
+
         public async Task GetProducts(string? categoryUrl = null)
         {
             var response = categoryUrl is null ? await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product") :
@@ -26,6 +28,21 @@ namespace ECommerceApp.Client.Services.Implementations
         {
             return await _httpClient.GetFromJsonAsync<ServiceResponse<Product>>
             ($"api/product/{productId}");
+        }
+
+        public async Task SearchProducts(string searchText)
+        {
+            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/Product/search/{searchText}");
+            if (response is { Success: true, Data: { } })
+                Products = response.Data;
+            if (Products.Count == 0)
+                Message = "No product found!";
+            ProductsChanged.Invoke();
+        }
+
+        public async Task<List<string>> GetProductSearchSuggestions(string searchText)
+        {
+            return (await _httpClient.GetFromJsonAsync<ServiceResponse<List<string>>>($"api/Product/searchSuggestions/{searchText}"))?.Data;
         }
     }
 }
