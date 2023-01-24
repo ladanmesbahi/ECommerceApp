@@ -5,4 +5,11 @@
 
 <PageTitle>My Shop</PageTitle>
 
-<ProductList></ProductList>
+@if (SearchText == null && CategoryUrl == null)
+{
+    <FeaturedProducts />
+}
+else
+{
+    <ProductList />
+}

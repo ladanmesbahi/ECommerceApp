@@ -18,7 +18,7 @@ namespace ECommerceApp.Client.Services.Implementations
 
         public async Task GetProducts(string? categoryUrl = null)
         {
-            var response = categoryUrl is null ? await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product") :
+            var response = categoryUrl is null ? await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product/featured") :
                 await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/category/{categoryUrl}");
             if (response is { Success: true, Data: { } })
                 Products = response.Data;

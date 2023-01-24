@@ -1,0 +1,29 @@
+﻿@inject IProductService ProductService
+<center><h2>Top products of today</h2></center>
+@if (ProductService.Products == null || ProductService.Products.Count == 0)
+{
+    <span>@ProductService.Message</span>
+}
+else
+{
+    <div class="container">
+        @foreach (var product in ProductService.Products)
+        {
+            if (product.Featured)
+            {
+                <div class="featured-product">
+                    <div>
+                        <a href="product/@product.Id">
+                            <img src="@product.ImageUrl" class="img"/>
+                        </a>
+                    </div>
+                    <h4><a href="product/@product.Id">@product.Title</a></h4>
+                    @if (product.Variants.Count > 0)
+                    {
+                        <h5 class="price">$@product.Variants.First().Price</h5>
+                    }
+                </div>
+            }
+        }
+    </div>
+}
