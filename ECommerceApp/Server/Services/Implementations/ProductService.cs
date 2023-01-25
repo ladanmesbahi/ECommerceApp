@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ECommerceApp.Shared.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceApp.Server.Services.Implementations
 {
@@ -47,11 +48,25 @@ namespace ECommerceApp.Server.Services.Implementations
             };
         }
 
-        public async Task<ServiceResponse<List<Product>>> SearchProducts(string searchText)
+        public async Task<ServiceResponse<ProductSearchResult>> SearchProducts(string searchText, int page)
         {
-            return new ServiceResponse<List<Product>>
+            var pageSize = 2f;
+            var pageCount = Math.Ceiling((await FindProductsBySearchText(searchText)).Count / pageSize);
+            var products = await _context.Products
+                .Where(p => p.Title.ToLower().Contains(searchText.ToLower()) ||
+                            p.Description.ToLower().Contains(searchText.ToLower()))
+                .Include(p => p.Variants)
+                .Skip((page - 1) * (int)pageSize)
+                .Take((int)pageSize)
+                .ToListAsync(); ;
+            return new ServiceResponse<ProductSearchResult>
             {
-                Data = await FindProductsBySearchText(searchText)
+                Data = new ProductSearchResult
+                {
+                    Products = products,
+                    CurrenPage = page,
+                    Pages = (int)pageCount
+                }
             };
         }
 

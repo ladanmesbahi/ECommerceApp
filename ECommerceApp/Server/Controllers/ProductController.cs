@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerceApp.Shared.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceApp.Server.Controllers
 {
@@ -31,10 +32,10 @@ namespace ECommerceApp.Server.Controllers
             return Ok(await _productService.GetProductsByCategory(categoryUrl));
         }
 
-        [HttpGet("search/{searchText}")]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> Search(string searchText)
+        [HttpGet("search/{searchText}/{page}")]
+        public async Task<ActionResult<ServiceResponse<ProductSearchResult>>> Search(string searchText, int page = 1)
         {
-            return Ok(await _productService.SearchProducts(searchText));
+            return Ok(await _productService.SearchProducts(searchText, page));
         }
 
         [HttpGet("searchSuggestions/{searchText}")]

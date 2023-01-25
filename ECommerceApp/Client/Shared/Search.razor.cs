@@ -17,7 +17,7 @@ namespace ECommerceApp.Client.Shared
 
         public void SearchProducts()
         {
-            NavigationManager.NavigateTo($"/search/{_searchText}");
+            NavigationManager.NavigateTo($"/search/{_searchText}/1");
         }
 
         public async Task HandleSearch(KeyboardEventArgs eventArgs)

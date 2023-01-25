@@ -1,4 +1,5 @@
-﻿using ECommerceApp.Shared.ViewModels;
+﻿using ECommerceApp.Shared.Dtos;
+using ECommerceApp.Shared.ViewModels;
 using System.Net.Http.Json;
 
 namespace ECommerceApp.Client.Services.Implementations
@@ -15,6 +16,9 @@ namespace ECommerceApp.Client.Services.Implementations
         public event Action ProductsChanged;
         public List<Product> Products { get; set; } = new List<Product>();
         public string Message { get; set; } = "Loading products... ";
+        public int CurrentPage { get; set; } = 1;
+        public int PageCount { get; set; } = 0;
+        public string LastSearchText { get; set; } = string.Empty;
 
         public async Task GetProducts(string? categoryUrl = null)
         {
@@ -22,6 +26,12 @@ namespace ECommerceApp.Client.Services.Implementations
                 await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/category/{categoryUrl}");
             if (response is { Success: true, Data: { } })
                 Products = response.Data;
+
+            CurrentPage = 1;
+            PageCount = 0;
+
+            if (Products.Count == 0)
+                Message = "No products found.";
             ProductsChanged.Invoke();
         }
         public async Task<ServiceResponse<Product>> GetProductById(int productId)
@@ -30,11 +40,16 @@ namespace ECommerceApp.Client.Services.Implementations
             ($"api/product/{productId}");
         }
 
-        public async Task SearchProducts(string searchText)
+        public async Task SearchProducts(string searchText, int page)
         {
-            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/Product/search/{searchText}");
+            LastSearchText = searchText;
+            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<ProductSearchResult>>($"api/Product/search/{searchText}/{page}");
             if (response is { Success: true, Data: { } })
-                Products = response.Data;
+            {
+                Products = response.Data.Products;
+                CurrentPage = response.Data.CurrenPage;
+                PageCount = response.Data.Pages;
+            }
             if (Products.Count == 0)
                 Message = "No product found!";
             ProductsChanged.Invoke();
