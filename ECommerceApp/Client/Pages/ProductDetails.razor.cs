@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using ECommerceApp.Shared.ViewModels;
+using Microsoft.AspNetCore.Components;
 
 namespace ECommerceApp.Client.Pages
 {
@@ -28,6 +29,17 @@ namespace ECommerceApp.Client.Pages
         private ProductVariant GetSelectedVariant()
         {
             return _product.Variants.SingleOrDefault(v => v.ProductTypeId == _currentTypeId);
+        }
+
+        public async Task AddToCart()
+        {
+            var productVariant = GetSelectedVariant();
+            var cartItem = new CartItem
+            {
+                ProductId = productVariant.ProductId,
+                ProductTypeId = productVariant.ProductTypeId
+            };
+            await CartService.AddToCart(cartItem);
         }
     }
 }
