@@ -1,0 +1,12 @@
+﻿.show-menu {
+    display: block;
+}
+.user-button {
+    margin-left: .5em;
+}
+.top-row a {
+    margin-left: 0;
+}
+.dorpdown-item:hover {
+    background-color: white;
+}
