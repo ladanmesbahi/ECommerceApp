@@ -15,5 +15,11 @@
             await Task.Delay(200);
             _showUserMenu = false;
         }
+        private async Task Logout()
+        {
+            await LocalStorageService.RemoveItemAsync("authToken");
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            NavigationManager.NavigateTo("");
+        }
     }
 }
