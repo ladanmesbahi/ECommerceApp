@@ -1,0 +1,5 @@
+﻿@page "/Profile" 
+@attribute [Authorize]
+<AuthorizeView>
+    <h3>Hi! You are logged in with <i>@context.User.Identity.Name</i>.</h3>
+</AuthorizeView>
