@@ -84,5 +84,27 @@ namespace ECommerceApp.Server.Services.Implementations
             var token = new JwtSecurityToken(claims: claims, expires: DateTime.Now.AddDays(1), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user is null)
+                return new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found!"
+                };
+
+            CreatePasswordHash(newPassword, out byte[] passwordHash, out byte[] passwordSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            await _context.SaveChangesAsync();
+            return new ServiceResponse<bool>
+            {
+                Success = true,
+                Data = true,
+                Message = "Password has been changed."
+            };
+        }
     }
 }
