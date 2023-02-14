@@ -1,12 +1,10 @@
-﻿using ECommerceApp.Shared.ViewModels;
-
-namespace ECommerceApp.Client.Shared
+﻿namespace ECommerceApp.Client.Shared
 {
     public partial class CartCounter : IDisposable
     {
         private int GetCartItemsCount()
         {
-            return LocalStorage.GetItem<List<CartItem>>("cart")?.Count ?? 0;
+            return LocalStorage.GetItem<int>("cartItemsCount");
         }
 
         protected override void OnInitialized()

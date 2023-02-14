@@ -22,6 +22,8 @@ namespace ECommerceApp.Client.Pages
                 _errorMessage = string.Empty;
                 await LocalStorage.SetItemAsync("authToken", result.Data);
                 await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                await CartService.StoreCartItems(true);
+                await CartService.GetCartItemsCount();
                 NavigationManager.NavigateTo(_returnUrl);
             }
             else

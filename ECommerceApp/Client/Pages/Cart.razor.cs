@@ -14,6 +14,7 @@ namespace ECommerceApp.Client.Pages
 
         private async Task LoadCart()
         {
+            await CartService.GetCartItemsCount();
             cartProducts = await CartService.GetCartProducts();
             if (cartProducts.Count == 0)
                 message = "Your cart is empty.";
