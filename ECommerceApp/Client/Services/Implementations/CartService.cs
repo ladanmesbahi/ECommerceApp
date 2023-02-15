@@ -8,13 +8,13 @@ namespace ECommerceApp.Client.Services.Implementations
     {
         private readonly ILocalStorageService _localStorage;
         private readonly HttpClient _http;
-        private readonly AuthenticationStateProvider _authStateProvider;
+        private readonly IAuthService _authService;
 
-        public CartService(ILocalStorageService localStorage, HttpClient http, AuthenticationStateProvider authStateProvider)
+        public CartService(ILocalStorageService localStorage, HttpClient http, IAuthService authService)
         {
             _localStorage = localStorage;
             _http = http;
-            _authStateProvider = authStateProvider;
+            _authService = authService;
         }
         public event Action OnChange;
         public async Task AddToCart(CartItem cartItem)
@@ -38,15 +38,9 @@ namespace ECommerceApp.Client.Services.Implementations
             }
             await GetCartItemsCount();
         }
-
-        private async Task<bool> IsUserAuthenticated()
-        {
-            return (await _authStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
-        }
-
         public async Task GetCartItemsCount()
         {
-            if (await IsUserAuthenticated())
+            if (await _authService.IsUserAuthenticated())
             {
                 var count = (await _http.GetFromJsonAsync<ServiceResponse<int>>("api/cart/count")).Data;
                 await _localStorage.SetItemAsync<int>("cartItemsCount", count);
@@ -61,7 +55,7 @@ namespace ECommerceApp.Client.Services.Implementations
 
         public async Task<List<CartProductResponse>> GetCartProducts()
         {
-            if (await IsUserAuthenticated())
+            if (await _authService.IsUserAuthenticated())
                 return (await _http.GetFromJsonAsync<ServiceResponse<List<CartProductResponse>>>("api/cart")).Data;
             else
             {
