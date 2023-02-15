@@ -7,8 +7,10 @@ namespace ECommerceApp.Client.Pages
     {
         private List<CartProductResponse> cartProducts = null;
         private string message = "Loading cart...";
+        bool orderPlaced = false;
         protected override async Task OnInitializedAsync()
         {
+            orderPlaced = false;
             await LoadCart();
         }
 
@@ -32,6 +34,12 @@ namespace ECommerceApp.Client.Pages
             if (product.Quantity < 1)
                 product.Quantity = 1;
             await CartService.UpdateQuantity(product);
+        }
+        private async Task PlaceOrder()
+        {
+            await OrderService.PlaceOrder();
+            await CartService.GetCartItemsCount();
+            orderPlaced = true;
         }
     }
 }

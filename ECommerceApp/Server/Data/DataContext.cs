@@ -17,6 +17,9 @@ namespace ECommerceApp.Server.Data
             modelBuilder.Entity<ProductVariant>()
                 .HasKey(pv => new { pv.ProductId, pv.ProductTypeId });
 
+            modelBuilder.Entity<OrderItem>()
+                .HasKey(o => new { o.OrderId, o.ProductId, o.ProductTypeId });
+
             modelBuilder.Entity<ProductType>().HasData(
                 new ProductType { Id = 1, Name = "Default" },
                 new ProductType { Id = 2, Name = "Paperback" },
@@ -267,5 +270,7 @@ namespace ECommerceApp.Server.Data
         public DbSet<ProductVariant> ProductVariants { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
