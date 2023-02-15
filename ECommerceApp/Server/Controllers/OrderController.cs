@@ -18,5 +18,17 @@ namespace ECommerceApp.Server.Controllers
         {
             return Ok(await _orderService.PlaceOrder());
         }
+
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<OrderOverviewResponse>>> GetOrders()
+        {
+            return Ok(await _orderService.GetOrders());
+        }
+
+        [HttpGet("{orderId}")]
+        public async Task<ActionResult<ServiceResponse<OrderOverviewResponse>>> GetOrderDetails(int orderId)
+        {
+            return Ok(await _orderService.GetOrderDetails(orderId));
+        }
     }
 }

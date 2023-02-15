@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using ECommerceApp.Shared.ViewModels;
+using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
 
 namespace ECommerceApp.Client.Services.Implementations
 {
@@ -14,6 +16,17 @@ namespace ECommerceApp.Client.Services.Implementations
             _authStateProvider = authStateProvider;
             _navigationManager = navigationManager;
         }
+
+        public async Task<OrderDetailsResponse> GetOrderDetails(int orderId)
+        {
+            return (await _http.GetFromJsonAsync<ServiceResponse<OrderDetailsResponse>>($"api/order/{orderId}")).Data;
+        }
+
+        public async Task<List<OrderOverviewResponse>> GetOrders()
+        {
+            return (await _http.GetFromJsonAsync<ServiceResponse<List<OrderOverviewResponse>>>("api/order")).Data;
+        }
+
         public async Task PlaceOrder()
         {
             if (await IsUserAuthenticated())
