@@ -1,21 +1,18 @@
-﻿using System.Security.Claims;
-
-namespace ECommerceApp.Server.Services.Implementations
+﻿namespace ECommerceApp.Server.Services.Implementations
 {
     public class OrderService : IOrderService
     {
         private readonly DataContext _context;
         private readonly ICartService _cartService;
-        private readonly IHttpContextAccessor _httpContext;
+        private readonly IAuthService _authService;
 
-        public OrderService(DataContext context, ICartService cartService, IHttpContextAccessor httpContext)
+        public OrderService(DataContext context, ICartService cartService, IAuthService authService)
         {
             _context = context;
             _cartService = cartService;
-            _httpContext = httpContext;
+            _authService = authService;
         }
 
-        private int GetUserId() => int.Parse(_httpContext.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         public async Task<ServiceResponse<bool>> PlaceOrder()
         {
             var products = (await _cartService.GetDbCartProducts()).Data;
@@ -33,14 +30,14 @@ namespace ECommerceApp.Server.Services.Implementations
 
             var order = new Order
             {
-                UserId = GetUserId(),
+                UserId = _authService.GetUserId(),
                 OrderDate = DateTime.Now,
                 OrderItems = orderItems,
                 TotalPrice = totalPrice
             };
 
             _context.Orders.Add(order);
-            _context.CartItems.RemoveRange(_context.CartItems.Where(cartItem => cartItem.UserId == GetUserId()));
+            _context.CartItems.RemoveRange(_context.CartItems.Where(cartItem => cartItem.UserId == _authService.GetUserId()));
 
             await _context.SaveChangesAsync();
 
