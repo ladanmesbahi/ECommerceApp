@@ -1,0 +1,55 @@
+﻿@inject IAddressService AddressService
+
+@if(_address is null)
+{
+    <span>You haven't specified a delivery address yet. 
+        <button class="btn" @onclick="InitAddress">Add an address? </button>
+    </span>
+}
+else if(!_editAddress)
+{
+    <p>
+        <span>@_address.FirstName @_address.LastName</span>
+        <br>
+        <span>@_address.Street</span>
+        <br>
+        <span>@_address.City, @_address.State, @_address.Zip</span>
+        <br>
+        <span>@_address.Country</span>
+    </p>
+    <button class="btn btn-primary" @onclick="EditAddress">Edit</button>
+}
+else
+{
+    <EditForm Model="_address" OnSubmit="SubmitAddress">
+        <div class="mb-3">
+            <label for="firstName">First Name</label>
+            <InputText id="firstName" @bind-Value="_address.FirstName" class="form-control"></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="lastName">Last Name</label>
+            <InputText id="lastName" @bind-Value="_address.LastName" class="form-control"></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="street">Street</label>
+            <InputText id="street" @bind-Value="_address.Street" class="form-control"></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="city">City</label>
+            <InputText id="city" @bind-Value="_address.City" class="form-control"></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="state">State</label>
+            <InputText id="state" @bind-Value="_address.State" class="form-control"></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="zipCode">Zip/Postal code</label>
+            <InputText id="zipCode" @bind-Value="_address.Zip" class="form-control"></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="country">Country</label>
+            <InputText id="country" @bind-Value="_address.Country" class="form-control"></InputText>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+}

@@ -36,5 +36,8 @@ else
             Total (@cartProducts.Count): $@cartProducts.Sum(product=>product.Price*product.Quantity)
         </div>
     </div>
+    <AuthorizeView>
+        <AddressForm/>
+    </AuthorizeView>
     <button @onclick="PlaceOrder" class="btn btn-success float-end mt-1">Place Order</button>
 }

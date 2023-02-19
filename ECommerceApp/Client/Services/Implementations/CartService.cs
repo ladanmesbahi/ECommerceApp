@@ -19,7 +19,7 @@ namespace ECommerceApp.Client.Services.Implementations
         public event Action OnChange;
         public async Task AddToCart(CartItem cartItem)
         {
-            if (await IsUserAuthenticated())
+            if (await _authService.IsUserAuthenticated())
                 await _http.PostAsJsonAsync("api/cart/add", cartItem);
             else
             {
@@ -69,7 +69,7 @@ namespace ECommerceApp.Client.Services.Implementations
 
         public async Task RemoveProductFromCart(int productId, int productTypeId)
         {
-            if (await IsUserAuthenticated())
+            if (await _authService.IsUserAuthenticated())
             {
                 await _http.DeleteAsync($"api/cart/{productId}/{productTypeId}");
             }
@@ -99,7 +99,7 @@ namespace ECommerceApp.Client.Services.Implementations
 
         public async Task UpdateQuantity(CartProductResponse product)
         {
-            if (await IsUserAuthenticated())
+            if (await _authService.IsUserAuthenticated())
             {
                 var request = new CartItem
                 {
