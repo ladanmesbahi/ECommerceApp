@@ -13,6 +13,7 @@ namespace ECommerceApp.Server.Services.Implementations
 
         public async Task<ServiceResponse<List<Category>>> AddCategory(Category category)
         {
+            category.IsNew = category.Editing = false;
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
             return await GetAdminCategories();
