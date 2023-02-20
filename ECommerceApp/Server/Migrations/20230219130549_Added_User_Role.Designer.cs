@@ -4,6 +4,7 @@ using ECommerceApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerceApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230219130549_Added_User_Role")]
+    partial class AddedUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,9 +80,6 @@ namespace ECommerceApp.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -87,9 +87,6 @@ namespace ECommerceApp.Server.Migrations
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Visible")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -99,26 +96,20 @@ namespace ECommerceApp.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Deleted = false,
                             Name = "Books",
-                            Url = "books",
-                            Visible = true
+                            Url = "books"
                         },
                         new
                         {
                             Id = 2,
-                            Deleted = false,
                             Name = "Movies",
-                            Url = "movies",
-                            Visible = true
+                            Url = "movies"
                         },
                         new
                         {
                             Id = 3,
-                            Deleted = false,
                             Name = "Video Games",
-                            Url = "video-games",
-                            Visible = true
+                            Url = "video-games"
                         });
                 });
 
