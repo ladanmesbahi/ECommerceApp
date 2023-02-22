@@ -19,6 +19,7 @@ namespace ECommerceApp.Client.Services.Implementations
         public int CurrentPage { get; set; } = 1;
         public int PageCount { get; set; } = 0;
         public string LastSearchText { get; set; } = string.Empty;
+        public List<Product> AdminProducts { get; set; }
 
         public async Task GetProducts(string? categoryUrl = null)
         {
@@ -58,6 +59,36 @@ namespace ECommerceApp.Client.Services.Implementations
         public async Task<List<string>> GetProductSearchSuggestions(string searchText)
         {
             return (await _httpClient.GetFromJsonAsync<ServiceResponse<List<string>>>($"api/Product/searchSuggestions/{searchText}"))?.Data;
+        }
+
+        public async Task GetAdminProducts()
+        {
+            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product/admin");
+            if (response is { Success: true, Data: { } })
+                AdminProducts = response.Data;
+
+            CurrentPage = 1;
+            PageCount = 0;
+
+            if (Products.Count == 0)
+                Message = "No products found.";
+        }
+
+        public async Task<Product> CreateProduct(Product product)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/product/admin", product);
+            return (await response.Content.ReadFromJsonAsync<ServiceResponse<Product>>()).Data;
+        }
+
+        public async Task<Product> UpdateProduct(Product product)
+        {
+            var response = await _httpClient.PutAsJsonAsync("api/product/admin", product);
+            return (await response.Content.ReadFromJsonAsync<ServiceResponse<Product>>()).Data;
+        }
+
+        public async Task DeleteProduct(int productId)
+        {
+            await _httpClient.DeleteAsync($"api/product/admin/{productId}");
         }
     }
 }

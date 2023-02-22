@@ -1,4 +1,5 @@
 ﻿using ECommerceApp.Shared.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceApp.Server.Controllers
@@ -48,6 +49,34 @@ namespace ECommerceApp.Server.Controllers
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetFeaturedProducts()
         {
             return Ok(await _productService.GetFeaturedProducts());
+        }
+
+        [HttpGet("admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetAdminProducts()
+        {
+            return Ok(await _productService.GetAdminProducts());
+        }
+
+        [HttpPost("admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<Product>>> CreateProduct(Product product)
+        {
+            return Ok(await _productService.CreateProduct(product));
+        }
+
+        [HttpPut("admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<Product>>> UpdateProduct(Product product)
+        {
+            return Ok(await _productService.UpdateProduct(product));
+        }
+
+        [HttpDelete("admin/{productId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteProduct(int productId)
+        {
+            return Ok(await _productService.DeleteProduct(productId));
         }
     }
 }
